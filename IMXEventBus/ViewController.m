@@ -26,33 +26,39 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSString *eventName = [NSString stringWithFormat:@"noti"];
+        NSString *eventName = [NSString stringWithFormat:@"event_default_0"];
         NSLog(@"R---regist  1 thread:%@",[NSThread currentThread]);
-        [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityLow inMainTread:NO action:^(id info) {
-            NSLog(@"high - ctrl :%@    thread:%@",[info description],[NSThread currentThread]);
+        [IMXEventBus_share registSubscriber:self.view markEvent:eventName priority:IMXEventSubscriberPriorityDefault inMainTread:NO action:^(id info) {
+            NSLog(@"default - ctrl :%@    thread:%@",[info description],[NSThread currentThread]);
         }];
     });
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSString *eventName = [NSString stringWithFormat:@"noti"];
+        sleep(2);
+        NSString *eventName = [NSString stringWithFormat:@"event_default_0"];
         NSLog(@"R---regist  2 thread:%@",[NSThread currentThread]);
-        [IMXEventBus_share registSubscriber:self.view markEvent:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:NO action:^(id info) {
-            NSLog(@"high - view :%@    thread:%@",[info description],[NSThread currentThread]);
+        [IMXEventBus_share registSubscriber:@"check" markEvent:eventName priority:IMXEventSubscriberPriorityLow inMainTread:NO action:^(id info) {
+            NSLog(@"low - view :%@    thread:%@",[info description],[NSThread currentThread]);
         }];
     });
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        sleep(10);
         NSLog(@"publish thread:%@",[NSThread currentThread]);
+
         NSString *eventName = [NSString stringWithFormat:@"noti"];
         [IMXEventBus_share publishEvent:eventName delivery:@{@"yes":@"wef"} isFromMainTread:NO];
     });
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        NSLog(@"unregister 1 thread:%@",[NSThread currentThread]);
-        [IMXEventBus_share unregistSubscriberFromTarget:self];
-    });
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        NSLog(@"unregister 2 thread:%@",[NSThread currentThread]);
-        [IMXEventBus_share unregistSubscriberFromTarget:self.view];
-    });
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+//        sleep(20);
+//        NSLog(@"unregister 1 thread:%@",[NSThread currentThread]);
+//        [IMXEventBus_share unregistSubscriberFromTarget:self];
+//    });
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+//        sleep(20);
+//        NSLog(@"unregister 2 thread:%@",[NSThread currentThread]);
+//        [IMXEventBus_share unregistSubscriberFromTarget:self.view];
+//    });
 
 
 
@@ -112,15 +118,15 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 }
 - (void)defaultPage:(UIButton *)btn{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *eventName = [NSString stringWithFormat:@"event_high_%ld",(long)defaultSuffix++];
-        [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityDefault inMainTread:YES action:^(id info) {
-            NSLog(@"default :%@",[info description]);
+        NSString *eventName = [NSString stringWithFormat:@"event_default_%ld",(long)defaultSuffix++];
+        [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:YES action:^(id info) {
+            NSLog(@"high :%@",[info description]);
         }];
     });
 
 }
 - (void)lowPage:(UIButton *)btn{
-    NSString *eventName = [NSString stringWithFormat:@"event_high_%ld",(long)lowSuffix++];
+    NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
     [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(id info) {
         NSLog(@"low :%@",[info description]);
     }];

@@ -37,7 +37,7 @@
 }
 - (void)addSubscriber:(IMXEventSubscriber *)subscriber forKey:(id)target{
     if(!subscriber) {return;}
-    if(!target) {return;}
+    if(!target) {return;}NSNotification
 
     switch (subscriber.priority) {
         case IMXEventSubscriberPriorityHigh:{
@@ -61,11 +61,9 @@
 }
 
 - (void)responseEventWithDeliveryData:(id)info isInMain:(BOOL)isMain{
-    dispatch_async(event_subscriber_dispatcher_concurrentQueue(), ^{
         [self actionMap:self.mapHigh deliveryData:info isInMain:isMain];
         [self actionMap:self.mapDefault deliveryData:info isInMain:isMain];
         [self actionMap:self.mapLow deliveryData:info isInMain:isMain];
-    });
 }
 - (BOOL)deleteEntriesForTarget:(id _Nonnull)target{
     if(!target) {return NO;}
@@ -102,24 +100,26 @@
 }
 - (void)actionMap:(NSMapTable *)map deliveryData:(id)info isInMain:(BOOL)isMain{
     // do need lock?
-    NSArray *tmps = [[NSArray alloc] initWithArray:map.objectEnumerator.allObjects];
-    [tmps enumerateObjectsUsingBlock:^(IMXEventSubscriber * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
-        dispatch_semaphore_wait(actionSemaphore, DISPATCH_TIME_FOREVER);
-        if(isMain){
-            [self mainTreadAction:^{
-                subscriber.actionBlock(info);
-            }];
-        }else{
-            if(subscriber.isInMainTread){
+    dispatch_async(event_subscriber_dispatcher_concurrentQueue(), ^{
+        NSArray *tmps = [[NSArray alloc] initWithArray:map.objectEnumerator.allObjects];
+        [tmps enumerateObjectsUsingBlock:^(IMXEventSubscriber * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
+            dispatch_semaphore_wait(actionSemaphore, DISPATCH_TIME_FOREVER);
+            if(isMain){
                 [self mainTreadAction:^{
                     subscriber.actionBlock(info);
                 }];
             }else{
-                subscriber.actionBlock(info);
+                if(subscriber.isInMainTread){
+                    [self mainTreadAction:^{
+                        subscriber.actionBlock(info);
+                    }];
+                }else{
+                    subscriber.actionBlock(info);
+                }
             }
-        }
-        dispatch_semaphore_signal(actionSemaphore);
-    }];
+            dispatch_semaphore_signal(actionSemaphore);
+        }];
+    });
 }
 - (void)deleteEntriesForTarget:(id)target in:(NSMapTable *)map{
     [map removeObjectForKey:target];
