@@ -12,7 +12,8 @@
 ## #如何使用：
 
 ### 1.）导入：
-1. Cocoapods：待添加。
+1. Cocoapods：pod 'IMXEventBus', '~> 1.0.0'
+
 2. 手动导入：本库无依赖其它三方库，直接将`IMXEventBus`文件夹拖入项目即可。
 
 ### 2.）头文件引入：
@@ -26,6 +27,7 @@
 
 1. 简略模式：
 
+
 	```
 //默认值：
 //优先级:Default;回调执行：非主线程
@@ -36,6 +38,7 @@
 	```
 
 2. 全参模式：
+
 
 	```
 	[IMXEventSubscriber addTarget:self name:@"login_eventName" priority:IMXEventSubscriberPriorityDefault inMainTread:YES action:^(IMXEventUserInfo *info) {
@@ -51,16 +54,19 @@
 
 1. 简略模式：
 
+
 	```
 //默认值：
 //被触发的事件：不强制在主线程中执行回调
 [IMXEventPoster postEventName:@"login_eventName" object:@{@"userName":@"demo"}];
+
 	```
 	
 2. 全参模式：
 
 	```
 [IMXEventPoster postEventName:@"login_eventName" object:nil forceMain:YES];
+
 	```
 	
 * **默认情况下，firceMain：NO。即所有被触发的监听对象，其回调执行均参考自身属性`isInMainThread `；否则均强制在主线程执行。**
@@ -75,8 +81,10 @@
 2. 开启Debug功能：默认不开启。
 
 	```
+	
 	[IMXEventDebug_share enableDebug:YES];
     IMXEventDebug_share.debugType = IMXEventDebugTypeAlert;
+    
 	```
 	
 * **无论如何设置，Debug功能仅在Debug模式下起作用。**
