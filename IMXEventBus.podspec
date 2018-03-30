@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "1.0.0"
   s.summary      = "a delightful EventBus for Object-C"
   s.license      = { :type => "MIT", :file => "LICENSE" }
-  s.homepage     = "https://github.com/PanZhow/IMXEventBus"
+  s.homepage     = "https://github.com/PanZhow/IMXEventBus.git"
   s.author             = { "zhoupanpan" => "2331838272@qq.com" }
   s.source       = { :git => "https://github.com/PanZhow/IMXEventBus.git", :tag => "#{s.version}" }
   s.requires_arc = true
