@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A107C9962059326700AA41AC /* IMXEventMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = A107C9952059326700AA41AC /* IMXEventMapTable.m */; };
+		A107C99F205F949600AA41AC /* IMXEventUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = A107C99E205F949600AA41AC /* IMXEventUserInfo.m */; };
 		A145D5182058C0AD00370BF0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A145D5172058C0AD00370BF0 /* AppDelegate.m */; };
 		A145D51B2058C0AD00370BF0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A145D51A2058C0AD00370BF0 /* ViewController.m */; };
 		A145D51E2058C0AD00370BF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A145D51C2058C0AD00370BF0 /* Main.storyboard */; };
@@ -21,6 +21,9 @@
 		A145D5532058C0D900370BF0 /* IMXEventBus.m in Sources */ = {isa = PBXBuildFile; fileRef = A145D54F2058C0D900370BF0 /* IMXEventBus.m */; };
 		A145D5562058C39A00370BF0 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A145D5552058C39A00370BF0 /* SecondViewController.m */; };
 		A145D5592058C3A800370BF0 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A145D5582058C3A800370BF0 /* ThirdViewController.m */; };
+		A15FD313206B421A00EF485B /* IMXEventSubscribModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A15FD312206B421A00EF485B /* IMXEventSubscribModel.m */; };
+		A15FD317206B66DF00EF485B /* IMXEventPoster.m in Sources */ = {isa = PBXBuildFile; fileRef = A15FD316206B66DF00EF485B /* IMXEventPoster.m */; };
+		A15FD31B206C883700EF485B /* IMXEventDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = A15FD31A206C883600EF485B /* IMXEventDebug.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A107C9942059326700AA41AC /* IMXEventMapTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventMapTable.h; sourceTree = "<group>"; };
-		A107C9952059326700AA41AC /* IMXEventMapTable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMXEventMapTable.m; sourceTree = "<group>"; };
+		A107C99D205F949600AA41AC /* IMXEventUserInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventUserInfo.h; sourceTree = "<group>"; };
+		A107C99E205F949600AA41AC /* IMXEventUserInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMXEventUserInfo.m; sourceTree = "<group>"; };
 		A145D5132058C0AD00370BF0 /* IMXEventBus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMXEventBus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A145D5162058C0AD00370BF0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A145D5172058C0AD00370BF0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -70,7 +73,13 @@
 		A145D5552058C39A00370BF0 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		A145D5572058C3A800370BF0 /* ThirdViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
 		A145D5582058C3A800370BF0 /* ThirdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
-		A145D55A2058C44400370BF0 /* IMXEventKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventKit.h; sourceTree = "<group>"; };
+		A15FD311206B421A00EF485B /* IMXEventSubscribModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventSubscribModel.h; sourceTree = "<group>"; };
+		A15FD312206B421A00EF485B /* IMXEventSubscribModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMXEventSubscribModel.m; sourceTree = "<group>"; };
+		A15FD315206B66DF00EF485B /* IMXEventPoster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventPoster.h; sourceTree = "<group>"; };
+		A15FD316206B66DF00EF485B /* IMXEventPoster.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMXEventPoster.m; sourceTree = "<group>"; };
+		A15FD319206C883600EF485B /* IMXEventDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventDebug.h; sourceTree = "<group>"; };
+		A15FD31A206C883600EF485B /* IMXEventDebug.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMXEventDebug.m; sourceTree = "<group>"; };
+		A15FD31C206CB59A00EF485B /* IMXEventBusKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMXEventBusKit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +110,10 @@
 		A107C9932059322000AA41AC /* Objs */ = {
 			isa = PBXGroup;
 			children = (
-				A107C9942059326700AA41AC /* IMXEventMapTable.h */,
-				A107C9952059326700AA41AC /* IMXEventMapTable.m */,
+				A107C99D205F949600AA41AC /* IMXEventUserInfo.h */,
+				A107C99E205F949600AA41AC /* IMXEventUserInfo.m */,
+				A15FD311206B421A00EF485B /* IMXEventSubscribModel.h */,
+				A15FD312206B421A00EF485B /* IMXEventSubscribModel.m */,
 			);
 			path = Objs;
 			sourceTree = "<group>";
@@ -135,15 +146,15 @@
 				A145D5172058C0AD00370BF0 /* AppDelegate.m */,
 				A145D5192058C0AD00370BF0 /* ViewController.h */,
 				A145D51A2058C0AD00370BF0 /* ViewController.m */,
+				A145D5542058C39A00370BF0 /* SecondViewController.h */,
+				A145D5552058C39A00370BF0 /* SecondViewController.m */,
+				A145D5572058C3A800370BF0 /* ThirdViewController.h */,
+				A145D5582058C3A800370BF0 /* ThirdViewController.m */,
 				A145D51C2058C0AD00370BF0 /* Main.storyboard */,
 				A145D51F2058C0AD00370BF0 /* Assets.xcassets */,
 				A145D5212058C0AD00370BF0 /* LaunchScreen.storyboard */,
 				A145D5242058C0AD00370BF0 /* Info.plist */,
 				A145D5252058C0AD00370BF0 /* main.m */,
-				A145D5542058C39A00370BF0 /* SecondViewController.h */,
-				A145D5552058C39A00370BF0 /* SecondViewController.m */,
-				A145D5572058C3A800370BF0 /* ThirdViewController.h */,
-				A145D5582058C3A800370BF0 /* ThirdViewController.m */,
 			);
 			path = IMXEventBus;
 			sourceTree = "<group>";
@@ -169,12 +180,12 @@
 		A145D5482058C0D800370BF0 /* IMXEventBus */ = {
 			isa = PBXGroup;
 			children = (
+				A15FD318206C881400EF485B /* Debug */,
+				A15FD314206B42A800EF485B /* Action */,
 				A107C9932059322000AA41AC /* Objs */,
 				A145D5492058C0D800370BF0 /* Event */,
-				A145D54E2058C0D900370BF0 /* IMXEventBus.h */,
-				A145D54F2058C0D900370BF0 /* IMXEventBus.m */,
 				A145D5502058C0D900370BF0 /* IMXEventDefinition.h */,
-				A145D55A2058C44400370BF0 /* IMXEventKit.h */,
+				A15FD31C206CB59A00EF485B /* IMXEventBusKit.h */,
 			);
 			path = IMXEventBus;
 			sourceTree = "<group>";
@@ -184,10 +195,30 @@
 			children = (
 				A145D54A2058C0D900370BF0 /* IMXEvent.h */,
 				A145D54B2058C0D900370BF0 /* IMXEvent.m */,
-				A145D54C2058C0D900370BF0 /* IMXEventSubscriber.h */,
-				A145D54D2058C0D900370BF0 /* IMXEventSubscriber.m */,
+				A145D54E2058C0D900370BF0 /* IMXEventBus.h */,
+				A145D54F2058C0D900370BF0 /* IMXEventBus.m */,
 			);
 			path = Event;
+			sourceTree = "<group>";
+		};
+		A15FD314206B42A800EF485B /* Action */ = {
+			isa = PBXGroup;
+			children = (
+				A145D54C2058C0D900370BF0 /* IMXEventSubscriber.h */,
+				A145D54D2058C0D900370BF0 /* IMXEventSubscriber.m */,
+				A15FD315206B66DF00EF485B /* IMXEventPoster.h */,
+				A15FD316206B66DF00EF485B /* IMXEventPoster.m */,
+			);
+			path = Action;
+			sourceTree = "<group>";
+		};
+		A15FD318206C881400EF485B /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				A15FD319206C883600EF485B /* IMXEventDebug.h */,
+				A15FD31A206C883600EF485B /* IMXEventDebug.m */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,15 +354,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A107C99F205F949600AA41AC /* IMXEventUserInfo.m in Sources */,
 				A145D51B2058C0AD00370BF0 /* ViewController.m in Sources */,
 				A145D5512058C0D900370BF0 /* IMXEvent.m in Sources */,
 				A145D5592058C3A800370BF0 /* ThirdViewController.m in Sources */,
 				A145D5262058C0AD00370BF0 /* main.m in Sources */,
 				A145D5562058C39A00370BF0 /* SecondViewController.m in Sources */,
+				A15FD317206B66DF00EF485B /* IMXEventPoster.m in Sources */,
 				A145D5182058C0AD00370BF0 /* AppDelegate.m in Sources */,
-				A107C9962059326700AA41AC /* IMXEventMapTable.m in Sources */,
 				A145D5532058C0D900370BF0 /* IMXEventBus.m in Sources */,
+				A15FD31B206C883700EF485B /* IMXEventDebug.m in Sources */,
 				A145D5522058C0D900370BF0 /* IMXEventSubscriber.m in Sources */,
+				A15FD313206B421A00EF485B /* IMXEventSubscribModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

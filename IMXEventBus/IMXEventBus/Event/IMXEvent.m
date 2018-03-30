@@ -7,7 +7,8 @@
 //
 
 #import "IMXEvent.h"
-#import "IMXEventSubscriber.h"
+#import "IMXEventSubscribModel.h"
+#import "IMXEventUserInfo.h"
 @interface IMXEvent(){
     dispatch_semaphore_t actionSemaphore;
 }
@@ -18,10 +19,9 @@
 
 @implementation IMXEvent
 - (void)dealloc{
-    NSLog(@"yew-dealloc");
 }
 #pragma mark ======  public  ======
-- (BOOL)hasContainedSubscriberForKey:(id)target{
+- (BOOL)hasContainedSubscribModelForKey:(id)target{
     if(!target) return NO;
 
     if([self.mapHigh objectForKey:target]){
@@ -35,42 +35,41 @@
     }
     return NO;
 }
-- (void)addSubscriber:(IMXEventSubscriber *)subscriber forKey:(id)target{
-    if(!subscriber) {return;}
-    if(!target) {return;}NSNotification
+- (void)registSubscribModel:(IMXEventSubscribModel *)subscrib forKey:(id)target{
+    if(!subscrib) {return;}
+    if(!target) {return;}
 
-    switch (subscriber.priority) {
+    switch (subscrib.priority) {
         case IMXEventSubscriberPriorityHigh:{
-            [self addSubscriber:subscriber forKey:target toMap:self.mapHigh];
+            [self addSubscribModel:subscrib forKey:target toMap:self.mapHigh];
         }
             break;
         case IMXEventSubscriberPriorityDefault:{
-            [self addSubscriber:subscriber forKey:target toMap:self.mapDefault];
+            [self addSubscribModel:subscrib forKey:target toMap:self.mapDefault];
         }
             break;
         case IMXEventSubscriberPriorityLow:{
-            [self addSubscriber:subscriber forKey:target toMap:self.mapLow];
+            [self addSubscribModel:subscrib forKey:target toMap:self.mapLow];
         }
             break;
 
         default:{
-            [self addSubscriber:subscriber forKey:target toMap:self.mapDefault];
+            [self addSubscribModel:subscrib forKey:target toMap:self.mapDefault];
         }
             break;
     }
 }
-
-- (void)responseEventWithDeliveryData:(id)info isInMain:(BOOL)isMain{
+- (void)postEventWithDeliveryData:(IMXEventUserInfo *)info isInMain:(BOOL)isMain{
         [self actionMap:self.mapHigh deliveryData:info isInMain:isMain];
         [self actionMap:self.mapDefault deliveryData:info isInMain:isMain];
         [self actionMap:self.mapLow deliveryData:info isInMain:isMain];
 }
-- (BOOL)deleteEntriesForTarget:(id _Nonnull)target{
+- (BOOL)deleteEntryForTarget:(id _Nonnull)target{
     if(!target) {return NO;}
 
-    [self deleteEntriesForTarget:target in:self.mapHigh];
-    [self deleteEntriesForTarget:target in:self.mapDefault];
-    [self deleteEntriesForTarget:target in:self.mapLow];
+    [self deleteEntryForTarget:target in:self.mapHigh];
+    [self deleteEntryForTarget:target in:self.mapDefault];
+    [self deleteEntryForTarget:target in:self.mapLow];
 
     BOOL isEmpty = [self isEmptyMap];
     return isEmpty;
@@ -99,47 +98,22 @@
     dispatch_set_target_queue(event_subscriber_dispatcher_concurrentQueue(), event_subscriber_dispatcher_serialQueue());
 }
 - (void)actionMap:(NSMapTable *)map deliveryData:(id)info isInMain:(BOOL)isMain{
-    // do need lock?
     dispatch_async(event_subscriber_dispatcher_concurrentQueue(), ^{
         NSArray *tmps = [[NSArray alloc] initWithArray:map.objectEnumerator.allObjects];
-        [tmps enumerateObjectsUsingBlock:^(IMXEventSubscriber * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
+        [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
             dispatch_semaphore_wait(actionSemaphore, DISPATCH_TIME_FOREVER);
-            if(isMain){
-                [self mainTreadAction:^{
-                    subscriber.actionBlock(info);
-                }];
-            }else{
-                if(subscriber.isInMainTread){
-                    [self mainTreadAction:^{
-                        subscriber.actionBlock(info);
-                    }];
-                }else{
-                    subscriber.actionBlock(info);
-                }
-            }
+            [subscriber actionWIthInfo:info forceMainThread:isMain];
             dispatch_semaphore_signal(actionSemaphore);
         }];
     });
 }
-- (void)deleteEntriesForTarget:(id)target in:(NSMapTable *)map{
+- (void)deleteEntryForTarget:(id)target in:(NSMapTable *)map{
     [map removeObjectForKey:target];
 }
-- (void)addSubscriber:(IMXEventSubscriber *)subscriber forKey:(id)target toMap:(NSMapTable *)map{
-    [map setObject:subscriber forKey:target];
+- (void)addSubscribModel:(IMXEventSubscribModel *)subscrib forKey:(id)target toMap:(NSMapTable *)map{
+    [map setObject:subscrib forKey:target];
 }
-- (void)mainTreadAction:(void(^)(void))action{
-    if([NSThread isMainThread]){
-        if(action){
-            action();
-        }
-    }else{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(action){
-                action();
-            }
-        });
-    }
-}
+
 #pragma mark ======  c  ======
 static dispatch_queue_t event_subscriber_dispatcher_serialQueue() {
     static dispatch_queue_t imx_event_subscriber_dispatcher_serialQueue;

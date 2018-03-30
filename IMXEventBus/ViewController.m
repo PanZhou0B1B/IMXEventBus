@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "SecondViewController.h"
 #import "ThirdViewController.h"
-#import "IMXEventKit.h"
+#import "IMXEventBusKit.h"
 static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 @interface ViewController ()
 
@@ -18,49 +18,12 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 @implementation ViewController
 
 - (void)dealloc{
-    NSLog(@"yes");
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSString *eventName = [NSString stringWithFormat:@"event_default_0"];
-        NSLog(@"R---regist  1 thread:%@",[NSThread currentThread]);
-        [IMXEventBus_share registSubscriber:self.view markEvent:eventName priority:IMXEventSubscriberPriorityDefault inMainTread:NO action:^(id info) {
-            NSLog(@"default - ctrl :%@    thread:%@",[info description],[NSThread currentThread]);
-        }];
-    });
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        sleep(2);
-        NSString *eventName = [NSString stringWithFormat:@"event_default_0"];
-        NSLog(@"R---regist  2 thread:%@",[NSThread currentThread]);
-        [IMXEventBus_share registSubscriber:@"check" markEvent:eventName priority:IMXEventSubscriberPriorityLow inMainTread:NO action:^(id info) {
-            NSLog(@"low - view :%@    thread:%@",[info description],[NSThread currentThread]);
-        }];
-    });
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        sleep(10);
-        NSLog(@"publish thread:%@",[NSThread currentThread]);
-
-        NSString *eventName = [NSString stringWithFormat:@"noti"];
-        [IMXEventBus_share publishEvent:eventName delivery:@{@"yes":@"wef"} isFromMainTread:NO];
-    });
-
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-//        sleep(20);
-//        NSLog(@"unregister 1 thread:%@",[NSThread currentThread]);
-//        [IMXEventBus_share unregistSubscriberFromTarget:self];
-//    });
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-//        sleep(20);
-//        NSLog(@"unregister 2 thread:%@",[NSThread currentThread]);
-//        [IMXEventBus_share unregistSubscriberFromTarget:self.view];
-//    });
-
-
+    [IMXEventDebug_share enableDebug:YES];
+    IMXEventDebug_share.debugType = IMXEventDebugTypeAlert;
 
     self.title = @"main page";
     self.view.backgroundColor = [UIColor lightGrayColor];
@@ -112,23 +75,26 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 
 - (void)highPage:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_high_%ld",(long)highSuffix++];
-    [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:NO action:^(id info) {
-        NSLog(@"high :%@",[info description]);
+    [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:NO action:^(IMXEventUserInfo *info) {
+        NSLog(@"high :%@   thread:%@",[info description],[NSThread currentThread]);
     }];
 }
 - (void)defaultPage:(UIButton *)btn{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *eventName = [NSString stringWithFormat:@"event_default_%ld",(long)defaultSuffix++];
-        [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:YES action:^(id info) {
-            NSLog(@"high :%@",[info description]);
+        [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityDefault inMainTread:YES action:^(IMXEventUserInfo *info) {
+            NSLog(@"default :%@   thread:%@",[info description],[NSThread currentThread]);
         }];
     });
 
 }
 - (void)lowPage:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
-    [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(id info) {
-        NSLog(@"low :%@",[info description]);
+    [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(IMXEventUserInfo *info) {
+        NSLog(@"low :%@   thread:%@",[info description],[NSThread currentThread]);
+    }];
+    [IMXEventSubscriber addTarget:self name:@"login_eventName" action:^(IMXEventUserInfo *info) {
+        NSLog(@"callback info:%@",[info description]);
     }];
 }
 - (void)resetBtn:(UIButton *)btn{

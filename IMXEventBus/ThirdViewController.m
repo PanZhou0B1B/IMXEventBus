@@ -7,7 +7,7 @@
 //
 
 #import "ThirdViewController.h"
-#import "IMXEventKit.h"
+#import "IMXEventBusKit.h"
 static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 @interface ThirdViewController ()
 
@@ -16,7 +16,6 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 @implementation ThirdViewController
 
 - (void)dealloc{
-    NSLog(@"yes");
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,22 +52,17 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 
 - (void)publishHigh:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_high_%ld",(long)highSuffix++];
-    [IMXEventBus_share publishEvent:eventName delivery:nil isFromMainTread:YES];
+    [IMXEventPoster postEventName:eventName object:nil forceMain:YES];
 }
 - (void)publishDefault:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_default_%ld",(long)defaultSuffix++];
-    [IMXEventBus_share publishEvent:eventName delivery:nil isFromMainTread:NO];
+    [IMXEventPoster postEventName:eventName object:@{@"yes":@"wef"} forceMain:NO];
 }
 - (void)publishLow:(UIButton *)btn{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *eventName = [NSString stringWithFormat:@"event_default_%ld",(long)defaultSuffix++];
-        [IMXEventBus_share removeEvent:eventName];
+        NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
+        [IMXEventPoster postEventName:eventName object:nil forceMain:YES];
     });
-
-
-
-//    NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
-//    [IMXEventBus_share publishEvent:eventName delivery:nil isFromMainTread:YES];
 }
 - (void)reset:(UIButton *)btn{
     highSuffix = 0;

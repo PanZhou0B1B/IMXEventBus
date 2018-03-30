@@ -7,7 +7,7 @@
 //
 
 #import "SecondViewController.h"
-#import "IMXEventKit.h"
+#import "IMXEventBusKit.h"
 static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 
 @interface SecondViewController ()
@@ -17,7 +17,6 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 @implementation SecondViewController
 
 - (void)dealloc{
-    NSLog(@"yes");
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -52,20 +51,20 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 }
 - (void)highPage:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_high_%ld",(long)highSuffix++];
-    [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:NO action:^(id info) {
-        NSLog(@"high :%@",[info description]);
+    [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityHigh inMainTread:NO action:^(IMXEventUserInfo *info) {
+        NSLog(@"high :%@   thread:%@",[info description],[NSThread currentThread]);
     }];
 }
 - (void)defaultPage:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_default_%ld",(long)defaultSuffix++];
-    [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityDefault inMainTread:YES action:^(id info) {
-        NSLog(@"default :%@",[info description]);
+    [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityDefault inMainTread:YES action:^(IMXEventUserInfo *info) {
+        NSLog(@"default :%@   thread:%@",[info description],[NSThread currentThread]);
     }];
 }
 - (void)lowPage:(UIButton *)btn{
     NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
-    [IMXEventBus_share registSubscriber:self markEvent:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(id info) {
-        NSLog(@"low :%@",[info description]);
+    [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(IMXEventUserInfo *info) {
+        NSLog(@"low :%@   thread:%@",[info description],[NSThread currentThread]);
     }];
 }
 - (void)resetBtn:(UIButton *)btn{
