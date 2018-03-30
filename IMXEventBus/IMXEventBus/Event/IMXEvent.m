@@ -10,11 +10,12 @@
 #import "IMXEventSubscribModel.h"
 #import "IMXEventUserInfo.h"
 @interface IMXEvent(){
-    dispatch_semaphore_t actionSemaphore;
+
 }
 @property (nonatomic,strong)NSMapTable *mapHigh;
 @property (nonatomic,strong)NSMapTable *mapDefault;
 @property (nonatomic,strong)NSMapTable *mapLow;
+@property (nonatomic,strong)dispatch_semaphore_t actionSemaphore;
 @end
 
 @implementation IMXEvent
@@ -85,7 +86,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        actionSemaphore = dispatch_semaphore_create(4);
+        self.actionSemaphore = dispatch_semaphore_create(4);
         [self nestConcurrent2SerialQueue];
     }
     return self;
@@ -100,10 +101,12 @@
 - (void)actionMap:(NSMapTable *)map deliveryData:(id)info isInMain:(BOOL)isMain{
     dispatch_async(event_subscriber_dispatcher_concurrentQueue(), ^{
         NSArray *tmps = [[NSArray alloc] initWithArray:map.objectEnumerator.allObjects];
+        __weak __typeof(self)weakSelf = self;
         [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
-            dispatch_semaphore_wait(actionSemaphore, DISPATCH_TIME_FOREVER);
+            __strong __typeof(weakSelf)strongSelf = weakSelf;
+            dispatch_semaphore_wait(strongSelf.actionSemaphore, DISPATCH_TIME_FOREVER);
             [subscriber actionWIthInfo:info forceMainThread:isMain];
-            dispatch_semaphore_signal(actionSemaphore);
+            dispatch_semaphore_signal(strongSelf.actionSemaphore);
         }];
     });
 }
