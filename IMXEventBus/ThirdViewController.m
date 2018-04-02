@@ -8,6 +8,7 @@
 
 #import "ThirdViewController.h"
 #import "IMXEventBusKit.h"
+
 static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 @interface ThirdViewController ()
 
@@ -59,6 +60,8 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
     [IMXEventPoster postEventName:eventName object:@{@"yes":@"wef"} forceMain:NO];
 }
 - (void)publishLow:(UIButton *)btn{
+    [IMXEventDebug_share showAllRegistEvent];
+    [IMXEventDebug_share showAllRegistEventDetail];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
         [IMXEventPoster postEventName:eventName object:nil forceMain:YES];

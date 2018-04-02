@@ -17,6 +17,10 @@
 }
 #pragma mark ======  public  ======
 - (void)actionWIthInfo:(IMXEventUserInfo *)info forceMainThread:(BOOL)isMain{
+#ifdef DEBUG
+    self.triggerCount++;
+#endif
+
     if(isMain){
         [IMXEventSubscribModel mainTreadAction:^{
             self.actionBlock(info);
@@ -32,7 +36,15 @@
     }
 }
 #pragma mark ======  life cycle  ======
-
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+#ifdef DEBUG
+        self.triggerCount = 0;
+#endif
+    }
+    return self;
+}
 #pragma mark ======  delegate  ======
 
 #pragma mark ======  event  ======

@@ -21,4 +21,7 @@ typedef NS_ENUM(NSInteger, IMXEventDebugType) {
 + (IMXEventDebug *)sharedInstance;
 - (void)enableDebug:(BOOL)isEnableDebug;
 - (void)showDebugMsg:(NSString *)msg;
+
+- (void)showAllRegistEvent;
+- (void)showAllRegistEventDetail;
 @end

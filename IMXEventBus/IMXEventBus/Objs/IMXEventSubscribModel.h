@@ -17,6 +17,9 @@
 @property (nonatomic,assign)IMXEventSubscriberPriority priority;
 @property (nonatomic,assign)BOOL isInMainThread;
 @property (nonatomic,weak)id target;
+#ifdef DEBUG
+@property (nonatomic,assign)NSInteger triggerCount;
+#endif
 
 - (void)actionWIthInfo:(IMXEventUserInfo *)info forceMainThread:(BOOL)isMain;
 @end
