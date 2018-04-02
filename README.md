@@ -210,3 +210,11 @@
 * [https://github.com/cesarferreira/SwiftEventBus](https://github.com/cesarferreira/SwiftEventBus)
 * [https://github.com/aixinyunchou/OCEventBus](https://github.com/aixinyunchou/OCEventBus)
 * [https://github.com/goodow/GDChannel](https://github.com/goodow/GDChannel)
+
+## #更新Pods开源库
+
+1. 提交code至github，或改version或保持不变（更改版本时不需要第3步骤）。
+2. pod trunk register <email@XX.com> '<name>' --description='<description>'
+3. pod trunk delete IMXEventBus 1.0.0
+4. pod trunk push --allow-warnings
+5. 使用时：pod setup更新
