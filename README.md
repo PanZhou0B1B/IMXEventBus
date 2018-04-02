@@ -218,3 +218,5 @@
 3. pod trunk delete IMXEventBus 1.0.0
 4. pod trunk push --allow-warnings
 5. 使用时：pod setup更新
+
+参考链接：[https://www.jianshu.com/p/d6beddcce8bb](https://www.jianshu.com/p/d6beddcce8bb)
