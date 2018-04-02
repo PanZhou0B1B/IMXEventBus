@@ -14,6 +14,10 @@
 @interface IMXEvent : NSObject
 @property (nonatomic,copy)NSString * _Nonnull eventName;
 
+#ifdef DEBUG
+@property (nonatomic,assign)NSInteger triggerCount;
+#endif
+
 /**
  Event 中是否包含`target-subscribModel`条目
 

@@ -44,28 +44,6 @@
         [self showAlert:msg];
     }
 }
-- (void)showAllRegistEvent{
-#ifdef DEBUG
-    NSDictionary *events = [[IMXEventBus sharedInstance] valueForKey:@"events"];
-    NSMutableString *mString = [[NSMutableString alloc] initWithString:@""];
-    [events enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, IMXEvent * _Nonnull event, BOOL * _Nonnull stop) {         
-        BOOL isNoSubs = [event isEmptyMap];
-        if(isNoSubs){
-            [mString appendFormat:@"%@", [NSString stringWithFormat:@"=====Attention=====eventName:%@\n===========subscribeModel:high~0,default~0,low~0\n",key]];
-        }else{
-            NSMapTable *high = [event valueForKey:@"mapHigh"];
-            NSInteger highCount = high.keyEnumerator.allObjects.count;
-            NSMapTable *defaultMap = [event valueForKey:@"mapDefault"];
-            NSInteger defaultCount = defaultMap.keyEnumerator.allObjects.count;
-            NSMapTable *low = [event valueForKey:@"mapLow"];
-            NSInteger lowCount = low.keyEnumerator.allObjects.count;
-            [mString appendFormat:@"%@", [NSString stringWithFormat:@"eventName:%@\nsubscribeModel:high~%ld,default~%ld,low~%ld\n",key,(long)highCount,(long)defaultCount,(long)lowCount]];
-        }
-        [mString appendFormat:@"=============\n\n"];
-    }];
-    NSLog(@"%@",mString);
-#endif
-}
 - (void)showAllRegistEventDetail{
 #ifdef DEBUG
     NSDictionary *events = [[IMXEventBus sharedInstance] valueForKey:@"events"];
@@ -73,7 +51,7 @@
     [events enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, IMXEvent * _Nonnull event, BOOL * _Nonnull stop) {
         BOOL isNoSubs = [event isEmptyMap];
         if(isNoSubs){
-            [mString appendFormat:@"%@", [NSString stringWithFormat:@"=====Attention=====eventName:%@\n===========subscribeModel:high~0,default~0,low~0",key]];
+            [mString appendFormat:@"%@", [NSString stringWithFormat:@"=====Attention=====eventName:%@，triggerCount:%ld\n===========subscribeModel:high~0,default~0,low~0",key,(long)event.triggerCount]];
         }else{
             NSMapTable *high = [event valueForKey:@"mapHigh"];
             NSInteger highCount = high.keyEnumerator.allObjects.count;
@@ -81,36 +59,7 @@
             NSInteger defaultCount = defaultMap.keyEnumerator.allObjects.count;
             NSMapTable *low = [event valueForKey:@"mapLow"];
             NSInteger lowCount = low.keyEnumerator.allObjects.count;
-            [mString appendFormat:@"%@", [NSString stringWithFormat:@"eventName:%@\nsubscribeModel:high~%ld,default~%ld,low~%ld\n",key,(long)highCount,(long)defaultCount,(long)lowCount]];
-            //event
-            NSArray *tmps = [[NSArray alloc] initWithArray:high.objectEnumerator.allObjects];
-            [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSInteger count = subscriber.triggerCount;
-                if(count <= 0){
-                    [mString appendFormat:@"===high need check===target:%@,        triggerCount:%ld\n",subscriber.target,(long)subscriber.triggerCount];
-                }else{
-                    [mString appendFormat:@"===high ===target:%@,triggerCount:%ld\n",subscriber.target,(long)subscriber.triggerCount];
-                }
-            }];
-            tmps = [[NSArray alloc] initWithArray:defaultMap.objectEnumerator.allObjects];
-            [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSInteger count = subscriber.triggerCount;
-                if(count <= 0){
-                    [mString appendFormat:@"===default need check======target:%@,        triggerCount:%ld\n",subscriber.target,(long)subscriber.triggerCount];
-                }else{
-                    [mString appendFormat:@"===default ===target:%@,triggerCount:%ld\n",subscriber.target,(long)subscriber.triggerCount];
-                }
-            }];
-            tmps = [[NSArray alloc] initWithArray:low.objectEnumerator.allObjects];
-            [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSInteger count = subscriber.triggerCount;
-                if(count <= 0){
-                    [mString appendFormat:@"===low need check======target:%@,        triggerCount:%ld\n",subscriber.target,(long)subscriber.triggerCount];
-                }else{
-                    [mString appendFormat:@"===low ===target:%@,triggerCount:%ld\n",subscriber.target,(long)subscriber.triggerCount];
-                }
-            }];
-
+            [mString appendFormat:@"%@", [NSString stringWithFormat:@"eventName:%@，triggerCount:%ld\nsubscribeModel:high~%ld,default~%ld,low~%ld\n",key,(long)event.triggerCount,(long)highCount,(long)defaultCount,(long)lowCount]];
         }
         [mString appendFormat:@"=============\n\n"];
     }];

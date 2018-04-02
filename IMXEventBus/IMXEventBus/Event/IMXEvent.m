@@ -61,6 +61,9 @@
     }
 }
 - (void)postEventWithDeliveryData:(IMXEventUserInfo *)info isInMain:(BOOL)isMain{
+#ifdef DEBUG
+    self.triggerCount++;
+#endif
         [self actionMap:self.mapHigh deliveryData:info isInMain:isMain];
         [self actionMap:self.mapDefault deliveryData:info isInMain:isMain];
         [self actionMap:self.mapLow deliveryData:info isInMain:isMain];
@@ -88,6 +91,10 @@
     if (self) {
         self.actionSemaphore = dispatch_semaphore_create(4);
         [self nestConcurrent2SerialQueue];
+
+#ifdef DEBUG
+        self.triggerCount = 0;
+#endif
     }
     return self;
 }
