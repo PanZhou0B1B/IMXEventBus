@@ -11,6 +11,11 @@
 #import "IMXEventBus.h"
 #import "IMXEvent.h"
 #import "IMXEventSubscribModel.h"
+#ifdef DEBUG
+#import <malloc/malloc.h>
+#endif
+
+
 @interface IMXEventDebug()
 @property (nonatomic,assign,getter=isEnableDebug)BOOL enableDebug;
 @end
@@ -64,6 +69,46 @@
         [mString appendFormat:@"=============\n\n"];
     }];
     NSLog(@"%@",mString);
+#endif
+}
+
+- (void)sizeOfEventBus{
+#ifdef DEBUG
+    NSDictionary *events = [[IMXEventBus sharedInstance] valueForKey:@"events"];
+    __block size_t size = 0,dirty_size = 0;
+    size = malloc_size((__bridge const void *)(events));
+    [events enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, IMXEvent * _Nonnull event, BOOL * _Nonnull stop) {
+        BOOL isNoSubs = [event isEmptyMap];
+
+        NSMapTable *high = [event valueForKey:@"mapHigh"];
+        NSMapTable *defaultMap = [event valueForKey:@"mapDefault"];
+        NSMapTable *low = [event valueForKey:@"mapLow"];
+
+        if(!isNoSubs){
+            size += malloc_size((__bridge const void *)(high));
+            size += malloc_size((__bridge const void *)(defaultMap));
+            size += malloc_size((__bridge const void *)(low));
+
+            NSArray *tmps = [[NSArray alloc] initWithArray:high.objectEnumerator.allObjects];
+            [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
+                size += malloc_size((__bridge const void *)(subscriber));
+            }];
+            tmps = [[NSArray alloc] initWithArray:defaultMap.objectEnumerator.allObjects];
+            [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
+                size += malloc_size((__bridge const void *)(subscriber));
+            }];
+            tmps = [[NSArray alloc] initWithArray:low.objectEnumerator.allObjects];
+            [tmps enumerateObjectsUsingBlock:^(IMXEventSubscribModel * _Nonnull subscriber, NSUInteger idx, BOOL * _Nonnull stop) {
+                size += malloc_size((__bridge const void *)(subscriber));
+            }];
+        }else{
+            dirty_size += malloc_size((__bridge const void *)(high));
+            dirty_size += malloc_size((__bridge const void *)(defaultMap));
+            dirty_size += malloc_size((__bridge const void *)(low));
+        }
+    }];
+    NSString *sizeString =  [NSString stringWithFormat:@"event size:%.4f MB \nevent dirty size:%.4f MB (more Event maps but without subscribeModels)",size/8.0/1000.0/1000.0,dirty_size/8.0/1000.0/1000.0];
+    NSLog(@"%@",sizeString);
 #endif
 }
 #pragma mark ======  life cycle  ======

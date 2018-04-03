@@ -23,4 +23,5 @@ typedef NS_ENUM(NSInteger, IMXEventDebugType) {
 - (void)showDebugMsg:(NSString *)msg;
 
 - (void)showAllRegistEventDetail;
+- (void)sizeOfEventBus;
 @end

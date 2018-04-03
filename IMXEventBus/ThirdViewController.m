@@ -61,6 +61,7 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 }
 - (void)publishLow:(UIButton *)btn{
     [IMXEventDebug_share showAllRegistEventDetail];
+    [IMXEventDebug_share sizeOfEventBus];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
         [IMXEventPoster postEventName:eventName object:nil forceMain:YES];
