@@ -107,7 +107,7 @@
             dirty_size += malloc_size((__bridge const void *)(low));
         }
     }];
-    NSString *sizeString =  [NSString stringWithFormat:@"event size:%.4f MB \nevent dirty size:%.4f MB (more Event maps but without subscribeModels)",size/8.0/1000.0/1000.0,dirty_size/8.0/1000.0/1000.0];
+    NSString *sizeString =  [NSString stringWithFormat:@"event size:~%.4f MB \nevent dirty size:~%.4f MB (more Event maps but without subscribeModels)",size/8.0/1024.0/1024.0,dirty_size/8.0/1024.0/1024.0];
     NSLog(@"%@",sizeString);
 #endif
 }

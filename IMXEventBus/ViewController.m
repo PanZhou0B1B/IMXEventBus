@@ -89,13 +89,13 @@ static NSInteger highSuffix = 0,defaultSuffix = 0,lowSuffix = 0;
 
 }
 - (void)lowPage:(UIButton *)btn{
-    NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
-    [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(IMXEventUserInfo *info) {
-        NSLog(@"low :%@   thread:%@",[info description],[NSThread currentThread]);
-    }];
-    [IMXEventSubscriber addTarget:self name:@"login_eventName" action:^(IMXEventUserInfo *info) {
-        NSLog(@"callback info:%@",[info description]);
-    }];
+    for(int i=0;i<1000;i++){
+        NSString *eventName = [NSString stringWithFormat:@"event_low_%ld",(long)lowSuffix++];
+        [IMXEventSubscriber addTarget:self name:eventName priority:IMXEventSubscriberPriorityLow inMainTread:YES action:^(IMXEventUserInfo *info) {
+            NSLog(@"low :%@   thread:%@",[info description],[NSThread currentThread]);
+        }];
+    }
+
 }
 - (void)resetBtn:(UIButton *)btn{
     highSuffix = 0;
